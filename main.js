@@ -4,7 +4,6 @@ if (!String.contains) {
     }
 }
 
-
 function recorrerEnOrden() {
     var cor1 = [],
         cor2 = [];
@@ -17,8 +16,6 @@ function recorrerEnOrden() {
 
 }
 
-
-
 function nuevoArbol() {
     let expresion = document.getElementById('txtE').value
     var nodos = Arbol.crear(expresion);
@@ -28,7 +25,6 @@ function nuevoArbol() {
 
     console.info(nodos);
 }
-
 
 var Oper = {
 
@@ -45,8 +41,6 @@ var Oper = {
         }
     },
 
-    
-    //Depura la expresion algebraica, quita espacios en blanco y deja un espacio entre operadores y dijitos
     prepararExpresion: function (expresion) {
         var operadores = "+-*/()^";
         var salida = "";
@@ -62,26 +56,21 @@ var Oper = {
         }
         return salida.trim();
     },
-    //Determinar jerarquia de operadores
     jerarquia: function (operador) {
         if (this.operadores[operador]) {
             return this.operadores[operador];
         }
-        //si no es un operador tiene mayor precedencia
         return 99;
     },
     aPosFija: function (expresion) {
         expresion = this.prepararExpresion(expresion);
         var infija = expresion.split(" ");
 
-        var entrada = infija.reverse(), // Entrada
-            T = [], // Temporal
-            S = []; //salida
+        var entrada = infija.reverse(), 
+            T = [], 
+            S = []; 
 
         while (entrada.length > 0) {
-
-            // E[E.length - 1] extrae el ultimo valor de la pila  .peek();
-            // console.info("E", E, "S", S, "P", P)
             switch (this.jerarquia(entrada[entrada.length - 1])) {
             case 1:
                 T.push(entrada.pop());
@@ -105,11 +94,8 @@ var Oper = {
                 S.push(entrada.pop());
             }
         }
-            //quita las comas y coloca espacio
         return S.join(" ")
-            //elimina 2 o mas espacios juntos
             .replace(/\s{2,}/g, ' ').
-            //elimina espacios al inicio y final
         trim();
     }
 
@@ -121,30 +107,23 @@ var Arbol = {
     crear: function (expresion) {
         var postfija = Oper.aPosFija(expresion);
         console.info("Expresion posfija: ", postfija);
-        //ejemplo Posfija = "2 23 6 + * 1 -";
 
         var postfija = postfija.split(" ");
 
 
-
-        //Declaración de las pilas
-        var E = postfija.reverse(); //Pila entrada
-        var P = []; //Pila de operandos
+        var E = postfija.reverse(); 
+        var P = [];
         console.info(E)
-        //Algoritmo de Evaluación Postfija
         var operadores = "+-*/%^";
         while (E.length > 0) {
-            //Si es un operador
             if (operadores.contains(E[E.length - 1])) {
                 P.push(this.crearNodo(E.pop(), P.pop(), P.pop()));
             } else {
                 P.push(E.pop());
             }
         }
-        //retorna nodos
         return P;
     },
-
 
     evaluar: function (operador, n2, n1) {
         console.info(n1 + operador + n2);
@@ -161,13 +140,11 @@ var Arbol = {
         return x;
     },
     getInfo: function (y) {
-        // Es un digito
         if (!isNaN(y)) {
             return {
                 label: y
             }
         }
-        // Es resultado de una operacion
         return y;
     },
     crearNodo: function (operador, n2, n1) {
@@ -182,20 +159,18 @@ var Arbol = {
 };
 
 var Recorrido = {
-    //(raíz, izquierdo, derecho)
      
     preorden: function (nodo, log) {
         if (nodo == null)
             return;
 
-        //mostrar datos del nodo
         log.push(nodo.label);
         if (!nodo.children)
             return;
-        this.preorden(nodo.children[0], log); //recorre subarbol izquierdo
-        this.preorden(nodo.children[1], log); //recorre subarbol derecho
+        this.preorden(nodo.children[0], log); 
+        this.preorden(nodo.children[1], log); 
     },
-    //(izquierdo, derecho, raíz)
+
     postorden: function (nodo, log) {
         if (nodo == null)
             return;
@@ -204,7 +179,6 @@ var Recorrido = {
             this.postorden(nodo.children[1], log);
         }
         log.push(nodo.label);
-        // console.info(nodo.label);
     }
     
 }
